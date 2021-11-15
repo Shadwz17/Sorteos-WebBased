@@ -77,5 +77,9 @@ Deberemos de crear nuestra base de datos primeramente en phpMyAdmin con el nombr
 Shadwz17 - Alejo Scheiber\
 Leewayweb - Verificación de cedulas Uruguayas
 
+---
+NOTA:
+Para tener accesso al boton de sortear se debe colocar en grupos 'admin' a la persona en concreto que se le desea otorgar el permiso
+---
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
