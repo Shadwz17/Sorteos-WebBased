@@ -1,0 +1,5 @@
+{
+    "require": {
+        "leewayweb/ci_php": "^1.0"
+    }
+}
