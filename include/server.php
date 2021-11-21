@@ -20,6 +20,12 @@
 	// Al presionar el boton de registrar
 	if (isset($_POST['reg_user'])) {
 		$username = mysqli_real_escape_string($db, $_POST['username']);
+
+		// Protección contra XSS básica
+		$username = htmlspecialchars($username);
+		// Ej: Vuelve <script>location.href="google.com"</script> a &lt;script&gt;location.href=&quot;google.com&quot;&lt;/script&gt; 
+		// Volviendo el código malicioso inservible en caso de que la variable, en este caso $username sea usada.
+		
 		$email = mysqli_real_escape_string($db, $_POST['email']);
 		$password_1 = mysqli_real_escape_string($db, $_POST['password_1']);
 		$password_2 = mysqli_real_escape_string($db, $_POST['password_2']);
@@ -42,14 +48,14 @@
         } else {
             array_push($errors, "La cedula digitada no es valida");
         }
-		// Verifica que no haya un usuario registrado con el mismo correo
-		$user_check_query = "SELECT * FROM usuarios WHERE nombre='$username' OR email='$email' LIMIT 1";
+		// Verifica que no haya un usuario registrado con el mismo correo o cedula
+		$user_check_query = "SELECT * FROM usuarios WHERE cedula='$cedula' OR email='$email' LIMIT 1";
 		$result = mysqli_query($db, $user_check_query);
 		$user = mysqli_fetch_assoc($result);
 		
 		if ($user) {
-		  if ($user['username'] === $username) {
-			array_push($errors, "Ese nombre ya está tomado");
+		  if ($user['cedula'] === $cedula) {
+			array_push($errors, "Esa cedula se encuentra en uso");
 		  }
 	  
 		  if ($user['email'] === $email) {
@@ -65,7 +71,7 @@
 
 			$_SESSION['username'] = $username;
 			$_SESSION['grupo'] = 'usuario';
-			$_SESSION['success'] = "Logeado con exito";
+			$_SESSION['success'] = "Registrado correctamente!";
 			header('location: index.php');
 		}
 
@@ -92,7 +98,7 @@
 			if (mysqli_num_rows($results) == 1) {
 				$_SESSION['grupo'] = $datosg['grupos'];
 				$_SESSION['username'] = $username;
-				$_SESSION['success'] = "Logeado con exito";
+				$_SESSION['success'] = "Logeado correctamente";
 				header('location: index.php');
 			}else {
 				array_push($errors, "El correo o contraseña es erroneo");
